@@ -1,0 +1,30 @@
+[
+  {
+    "id" : "56cb6bbb0fb67b2e1bf6bced",
+    "name" : "Halo 5",
+    "platform" : "Xbox One",
+    "genre" : "Shooter",
+    "__v": 0
+  },
+  {
+    "id": "56cb6bbb0fb67b2e1bf6bcee",
+    "name": "Fallout 5",
+    "platform": "PlayStation 4",
+    "genre": "Role-Playing",
+    "__v": 0
+  },
+  {
+    "id": "56cb6bbb0fb67b2e1bf6bcef",
+    "name": "Super Smash Bros.",
+    "platform": "Wii U",
+    "genre": "Fighting",
+    "__v": 0
+  },
+  {
+    "id": "56cb6bbb0fb67b2e1bf6bcf0",
+    "name": "Pokemon X",
+    "platform": "3DS",
+    "genre": "Role-Playing",
+    "__v": 0
+  }
+]
