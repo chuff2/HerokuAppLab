@@ -1,5 +1,6 @@
 package com.example.herokuapp;
 
+import android.app.Service;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
     private ArrayList<Game> gameList;
-    private CustomAdapter adapter;
+    private static CustomAdapter adapter;
     private Context context;
 
     private String username;
@@ -47,33 +48,41 @@ public class MainActivity extends AppCompatActivity {
         //set adapter
         listView.setAdapter(adapter);
 
-        SharedPreferences preferences = getPreferences(1);
+        SharedPreferences preferences = getSharedPreferences("loginDetails", MODE_PRIVATE);
         username = preferences.getString("username", null);
         password = preferences.getString("password", null);
 
+        //debug
+        //Log.d("TO BE PASSED", username + " " + password);
+
         //TODO uncomment this once you have implemented getGamesRetro
-        //getGamesRetro(username, password);
+        getGamesRetro(username, password);
     }
 
     private void getGamesRetro(String username, String password){
 
         //create the REST client
-        GameClient client = null;
+        GameClient client = ServiceGenerator.createService(GameClient.class, username, password);
 
         //TODO
-        Call<List<Game>> call = null;
+        Call<List<Game>> call = client.games();
 
         call.enqueue(new Callback<List<Game>>() {
 
             @Override
             public void onResponse(Call<List<Game>> call, Response<List<Game>> response) {
                 if (response.isSuccess()) {
-                    Log.d("HTTP_GET_RESPONSE", response.raw().toString());
+                    //Log.d("HTTP_GET_RESPONSE", response.raw().toString());
                     //TODO populate list with the respons (JSON)
+                    for (Game singleGame : response.body()){
+                        gameList.add(singleGame);
+                    }
+                    adapter.notifyDataSetChanged();
                 } else {
                     // error response, no access to resource?
-                    Log.d("HTTP_GET_RESPONSE", response.raw().toString());
+                    //Log.d("HTTP_GET_RESPONSE", response.raw().toString());
                     //TODO do something to say you got nothing back
+                    Toast.makeText(getApplicationContext(), "Got nothing back...", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -82,14 +91,18 @@ public class MainActivity extends AppCompatActivity {
                 // something went completely south (like no internet connection)
                 Log.d("Error", t.getMessage());
                 //TODO do something to handle failure
+                Toast.makeText(getApplicationContext(), "Failure occured...", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    public void deleteGame(Game game){
+
+    public static void deleteGame(Game game){
         //TODO make a http request to delete the game
+        adapter.notifyDataSetChanged();
     }
 
+    /*
     private void testCase1(){
         //fetch backend stuffs using some s
         Gson gson = new GsonBuilder().create();
@@ -114,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    */
 
     /**
      * Read from a resources file and create a object that will allow the creation of other

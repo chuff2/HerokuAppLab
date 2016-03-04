@@ -1,6 +1,7 @@
 package com.example.herokuapp;
 
 import android.util.Base64;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -10,6 +11,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import android.util.Log;
 
 /**
  * Created by James on 2/25/2016.
@@ -19,7 +21,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ServiceGenerator {
 
     //TODO set the base url for this client
-    public static final String API_BASE_URL = "https://google.com";
+    //https://id.heroku.com/login
+    //http://mean407.herokuapp.com/api/
+    public static final String API_BASE_URL = "https://mean407.herokuapp.com/api/";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -43,11 +47,15 @@ public class ServiceGenerator {
                 public Response intercept(Interceptor.Chain chain) throws IOException {
                     Request original = chain.request();
 
+                    //debug
+                    //Log.d("LOGIN INFO: ",  username +" " + password);
+
                     Request.Builder requestBuilder = original.newBuilder()
                             .header("Authorization", basic)
                             .header("Accept", "/api/json")
                             //TODO add additional headers here
-
+                            .header("email", username)
+                            .header("password", password)
                             .method(original.method(), original.body());
 
                     Request request = requestBuilder.build();

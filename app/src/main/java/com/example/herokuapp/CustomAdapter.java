@@ -7,7 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -72,9 +75,9 @@ public class CustomAdapter extends BaseAdapter {
         final Game game = getItem(position);
 
         //TODO Populate the data into the template view using the data object
-        viewHolder.name.setText("The name of the Game");
-        viewHolder.genre.setText("The genre of the game");
-        viewHolder.platform.setText("The platform of the game");
+        viewHolder.name.setText(game.getName());
+        viewHolder.genre.setText(game.getGenre());
+        viewHolder.platform.setText(game.getPlatform());
 
 
         //TODO implement onclick for delete (do this after implementing retrofit)
@@ -82,13 +85,22 @@ public class CustomAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Log.d("CUSTOM_ADAPTER", "Delete button was pressed");
-                /*
+                LinearLayout parent = (LinearLayout) ((ViewGroup) v.getParent());
+                LinearLayout sibling = (LinearLayout) ((ViewGroup) parent).getChildAt(0);
+                TextView name = (TextView) ((ViewGroup) sibling).getChildAt(0);
+                int deleteIndex = 0;
                 for (Game singleGame : games) {
-                    if (singleGame.getName().equals(v.)){
-
+                    Log.d("CUSTOM_ADAPTER", singleGame.getName().toString());
+                    if (singleGame.getName().toString().equals(name.getText().toString())){
+                        break;
                     }
+                    deleteIndex++;
                 }
-                */
+                games.remove(deleteIndex);
+                MainActivity.deleteGame(null);
+                //deleteGame(null);
+                //possible make a listener in this class and set it here and have it update in MainActivity
+                //context.getApplicationContext();
             }
         });
 
